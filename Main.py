@@ -8,6 +8,7 @@ from modules.Hero import *
 from modules.Maze_Solver import *
 from modules.Login_System import *
 from modules.Load_Game import *
+from modules.Loading_bar import *
 oak_wood_color = (139, 69, 19) 
 '''Main function'''
 
@@ -30,12 +31,14 @@ def main(cfg):
 	print(User_Info)
 	
 	if Siuu:
-		Interface(screen, cfg, 'game_start')
+		Interface_Game_Start(screen, cfg)
 		# Interface_Load_Game(screen, cfg)
 		# Interface_Difficulty(screen, cfg)
+		_,MAZESIZE,Difficulty_Level = Interface_Difficulty(screen, cfg)
+		BLOCKSIZE = 600//MAZESIZE[0]
+	Loading_Bar(screen, cfg)
 	
-	_,MAZESIZE,Difficulty_Level = Interface_Difficulty(screen, cfg)
-	BLOCKSIZE = 600//MAZESIZE[0]
+	
 	
 	# Record the number of levels
 	num_levels = 0
@@ -59,7 +62,7 @@ def main(cfg):
 		# --Main loop within the level
 		solution = None
 		draw_solution=False
-		# Players_Data=load_users('users.pkl')
+		
 		while True:
 			dt = clock.tick(cfg.FPS)
 			screen.fill(oak_wood_color)
@@ -130,7 +133,7 @@ def main(cfg):
 			if best_scores > num_steps:
 				best_scores = num_steps
 		# --Level switching
-		Interface(screen, cfg, mode='game_switch')
+		Interface_Game_Switch(screen, cfg)
 
 
 '''run'''

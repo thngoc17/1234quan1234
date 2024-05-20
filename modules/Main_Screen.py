@@ -13,7 +13,7 @@ from modules.Load_Game import *
 '''Game start / level switching / game end interface'''
 
 
-def Interface(screen, cfg, mode='game_start'):
+def Interface_Game_Start(screen, cfg):
     pygame.display.set_mode(cfg.SCREENSIZE)
     font = pygame.font.SysFont('Consolas', 30)
     clock = pygame.time.Clock()
@@ -22,23 +22,22 @@ def Interface(screen, cfg, mode='game_start'):
         screen.fill((192, 192, 192))
 
         buttons = []
-        if mode == 'game_start':
-            buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//3), 'START', font))
-            buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//2), 'LOAD GAME', font))
-            buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, (cfg.SCREENSIZE[1]//2)+(cfg.SCREENSIZE[1]//2-cfg.SCREENSIZE[1]//3)), 'QUIT', font))
-        elif mode == 'game_switch':
-            buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//3), 'NEXT', font))
-            buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//2), 'MAIN MENU', font))
-            buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//2+(cfg.SCREENSIZE[1]//2-cfg.SCREENSIZE[1]//3)), 'QUIT', font))
-        elif mode == 'game_end':
-            buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//3), 'RESTART', font))
-            buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//2), 'MAIN MENU', font))   
-            buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//2+(cfg.SCREENSIZE[1]//2-cfg.SCREENSIZE[1]//3)), 'QUIT', font))
+        
+        buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//3), 'START', font))
+        buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//2), 'LOAD GAME', font))
+        buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, (cfg.SCREENSIZE[1]//2)+(cfg.SCREENSIZE[1]//2-cfg.SCREENSIZE[1]//3)), 'QUIT', font))
+        # elif mode == 'game_switch':
+        #     buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//3), 'NEXT', font))
+        #     buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//2), 'MAIN MENU', font))
+        #     buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//2+(cfg.SCREENSIZE[1]//2-cfg.SCREENSIZE[1]//3)), 'QUIT', font))
+        # elif mode == 'game_end':
+        #     buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//3), 'RESTART', font))
+        #     buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//2), 'MAIN MENU', font))   
+        #     buttons.append(Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//2+(cfg.SCREENSIZE[1]//2-cfg.SCREENSIZE[1]//3)), 'QUIT', font))
         # elif mode == 'game_save':
         #     with open('data.pkl', 'rb') as f:
         #         all_data = pickle.load(f)
-        else:
-            raise ValueError('Interface.mode unsupport <%s>...' % mode)
+
 
         
 
@@ -56,22 +55,48 @@ def Interface(screen, cfg, mode='game_start'):
                             sys.exit(-1)
                         # elif mode == 'game_start' and i == 0:  # If the second button (load game button) is clicked
                         #     Interface_Load_Game(screen, cfg)
-                        elif mode == 'game_start' and i == 1:  # Load_Game
-                            Interface_Load_Game(screen, cfg) 
-                        elif (mode == 'game_switch' or 'game_end') and i == 1:  #Main_Menu
-                            Interface(screen, cfg, mode = 'game_start')
+                        elif i == 1:  # Next_Buttoon=
+                            Interface_Load_Game(screen, cfg)
                         else:
                             return True  # If any other button is clicked
 
         pygame.display.update()
         clock.tick(cfg.FPS)
+def Interface_Game_Switch(screen, cfg):
+    pygame.display.set_mode(cfg.SCREENSIZE)
+    font = pygame.font.SysFont('Consolas', 30)
+    clock = pygame.time.Clock()
+    running = True
+    while running:
+        screen.fill((192, 192, 192))
+        next_button = Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//3), 'NEXT', font)
+        main_menu_button = Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//2), 'MAIN MENU', font)
+        quit_button = Button(screen, ((cfg.SCREENSIZE[0]-200)//2, (cfg.SCREENSIZE[1]//2)+(cfg.SCREENSIZE[1]//2-cfg.SCREENSIZE[1]//3)), 'QUIT', font)
+        expanded_next_button = next_button.inflate(130, 130)
+        expanded_main_menu_button = main_menu_button.inflate(130, 130)
+        expanded_quit_button = quit_button.inflate(130, 130)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit(-1)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if expanded_quit_button.collidepoint(pygame.mouse.get_pos()):
+                    pygame.quit()
+                    sys.exit(-1)
+                elif expanded_next_button.collidepoint(pygame.mouse.get_pos()):
+                    return True
+                elif expanded_main_menu_button.collidepoint(pygame.mouse.get_pos()):
+                    Interface_Game_Start(screen, cfg)
+                    
 
-
+        pygame.display.update()
+        clock.tick(cfg.FPS)
 def Interface_Difficulty(screen, cfg):
     pygame.display.set_mode(cfg.SCREENSIZE)
     font = pygame.font.SysFont('Consolas', 30)
     clock = pygame.time.Clock()
-    while True:
+    running = True
+    while running:
         screen.fill((192, 192, 192))
         easy_button = Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//3), 'EASY', font)
         medium_button = Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//2), 'MEDIUM', font)
@@ -93,7 +118,7 @@ def Interface_Difficulty(screen, cfg):
                 elif expanded_hard_button.collidepoint(pygame.mouse.get_pos()):
                     return True, (100, 100), 'hard'
                 elif expanded_main_menu_button.collidepoint(pygame.mouse.get_pos()):
-                    Interface(screen, cfg, mode='game_start')
+                    running = False
 
         pygame.display.update()
         clock.tick(cfg.FPS)
@@ -128,7 +153,8 @@ def Interface_Load_Game(screen, cfg):
     font = pygame.font.SysFont('Consolas', 30)
     clock = pygame.time.Clock()
     user_data=load_users('users_data.pkl')
-    while True:
+    running = True
+    while running:
         screen.fill((192, 192, 192))
         main_menu_button = Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//3), 'MAIN MENU', font)
         exit_button = Button(screen, ((cfg.SCREENSIZE[0]-200)//2, cfg.SCREENSIZE[1]//2), 'EXIT', font)
@@ -154,25 +180,27 @@ def Interface_Load_Game(screen, cfg):
                 showText(screen, font, 'No maze data', (0, 0, 0), ((cfg.SCREENSIZE[0]-700)//2+30, cfg.SCREENSIZE[1]//2.5 + i*50))
             
             # Display the username as text
-            
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit(-1)
             elif event.type == pygame.MOUSEBUTTONDOWN:
+                
                 for i, button in enumerate(play_buttons):
                     expanded_button = button.inflate(100, 100)
                     if expanded_button.collidepoint(pygame.mouse.get_pos()):
-                        Main.main(cfg)
+                        pass
                 for i, button in enumerate(exit_buttons):
                     expanded_button = button.inflate(100, 100)
                     if expanded_button.collidepoint(pygame.mouse.get_pos()):
-                        return True
+                        running = False
                 if expanded_exit_button.collidepoint(pygame.mouse.get_pos()):
                     pygame.quit()
                     sys.exit(-1)
                 elif expanded_main_menu_button.collidepoint(pygame.mouse.get_pos()):
-                    Interface(screen, cfg, 'game_start')
+                    running = False
+                    
 
         pygame.display.update()
         clock.tick(cfg.FPS)

@@ -1,5 +1,5 @@
 import pygame
-from modules.mazes import *
+from modules.Maze_Generator import *
 import random
 from queue import PriorityQueue
 class Maze_solver:
@@ -40,9 +40,9 @@ class Maze_solver:
         start.has_walls[0] = False
         end.has_walls[1] = False
         self.start, self.end = start, end
-    def a_star_search(self):
+    def a_star_search(self, current_pos):
         count = 0
-        start = self.start
+        start = current_pos
         end = self.end
         open_set = PriorityQueue()
         open_set.put((0, count, start))
@@ -51,20 +51,14 @@ class Maze_solver:
         g_score[start] = 0
         f_score = {block: float("inf") for row in self.maze.blocks_list for block in row}
         f_score[start] = h(start.coordinate, end.coordinate)
-
         open_set_hash = {start}
-
         while not open_set.empty():
             current = open_set.get()[2]
             open_set_hash.remove(current)
-
             if current == end:
-                
                 return came_from
-
             for neighbor in self.get_neighbors(current):
                 temp_g_score = g_score[current] + 1
-
                 if temp_g_score < g_score[neighbor]:
                     came_from[neighbor] = current
                     g_score[neighbor] = temp_g_score
@@ -72,15 +66,25 @@ class Maze_solver:
                     if neighbor not in open_set_hash:
                         count += 1
                         open_set.put((f_score[neighbor], count, neighbor))
-                        open_set_hash.add(neighbor)
-                    
+                        open_set_hash.add(neighbor)         
         return False
-    def to_dict(self):
-        return {
-            'maze': self.maze.to_dict(),
-            'start': self.start.coordinate,
-            'end': self.end.coordinate
-        }
+    def bfs_search(self, start):
+        queue = [start]
+        visited = set([start])
+        came_from = {start: None}
+
+        while queue:
+            current = queue.pop(0)
+            if current == self.end:
+                return came_from
+
+            for neighbor in self.get_neighbors(current):
+                if neighbor not in visited:
+                    queue.append(neighbor)
+                    visited.add(neighbor)
+                    came_from[neighbor] = current
+
+        return False
 def h(p1, p2):
     x1, y1 = p1
     x2, y2 = p2

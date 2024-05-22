@@ -1,6 +1,6 @@
 import cfg
 import pygame
-
+import threading
 import pickle
 import sys
 from modules.Main_Screen import *
@@ -41,7 +41,7 @@ def main(cfg):
 		if Siuu:
 		# Interface_Load_Game(screen, cfg)
 		# Interface_Difficulty(screen, cfg)
-			MAZESIZE, BLOCKSIZE, maze_now, maze_solver, hero_now, num_steps, Difficulty_Level = Interface(screen, cfg, Username, Password)
+			MAZESIZE, BLOCKSIZE, maze_now, maze_solver, hero_now, num_steps, time, Difficulty_Level = Interface(screen, cfg, Username, Password)
 					
 		Loading_Bar(screen, cfg)
 		num_levels += 1
@@ -52,7 +52,7 @@ def main(cfg):
 		# --Main loop within the level
 		solution = None
 		draw_solution=False
-		Interface_Game_Play(screen, cfg, font, clock, maze_now, maze_solver, hero_now, draw_solution, num_steps, num_levels, best_scores, Difficulty_Level, BLOCKSIZE, oak_wood_color, Username, Password)
+		Interface_Game_Play(screen, cfg, font, clock, maze_now, maze_solver, hero_now, draw_solution, num_steps, time, num_levels, best_scores, Difficulty_Level, BLOCKSIZE, oak_wood_color, Username, Password)
 		# ---Update Best Score
 		if best_scores == 'None':
 			best_scores = num_steps

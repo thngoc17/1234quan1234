@@ -22,15 +22,16 @@ def Button(screen, position, text, font, buttoncolor=(120, 120, 120), clickedcol
     else:
         pygame.draw.rect(screen, buttoncolor, (left, top, bwidth, bheight))
 
-    pygame.draw.line(screen, linecolor, (left, top), (left+bwidth, top), 5)
-    pygame.draw.line(screen, linecolor, (left, top-2), (left, top+bheight), 5)
-    pygame.draw.line(screen, linecolor, (left, top+bheight), (left+bwidth, top+bheight), 5)
-    pygame.draw.line(screen, linecolor, (left+bwidth, top+bheight), (left+bwidth, top), 5)
+    pygame.draw.line(screen, linecolor, (left, top), (left+bwidth, top), 1)
+    pygame.draw.line(screen, linecolor, (left, top-2), (left, top+bheight), 1)
+    pygame.draw.line(screen, linecolor, (left, top+bheight), (left+bwidth, top+bheight), 1)
+    pygame.draw.line(screen, linecolor, (left+bwidth, top+bheight), (left+bwidth, top), 1)
     
     text_render = font.render(text, 1, textcolor)
     rect = text_render.get_rect()
     rect.centerx, rect.centery = left + bwidth / 2, top + bheight / 2
     return screen.blit(text_render, rect)
+
 def HalfButton(screen, position, text, font, buttoncolor=(120, 120, 120), clickedcolor=(90, 90, 90), linecolor=(20, 20, 20), textcolor=(255, 255, 255), bwidth=100, bheight=50):
     left, top = position
     mouse = pygame.mouse.get_pos()
@@ -43,10 +44,10 @@ def HalfButton(screen, position, text, font, buttoncolor=(120, 120, 120), clicke
     else:
         pygame.draw.rect(screen, buttoncolor, (left, top, bwidth, bheight))
 
-    pygame.draw.line(screen, linecolor, (left, top), (left+bwidth, top), 5)
-    pygame.draw.line(screen, linecolor, (left, top-2), (left, top+bheight), 5)
-    pygame.draw.line(screen, linecolor, (left, top+bheight), (left+bwidth, top+bheight), 5)
-    pygame.draw.line(screen, linecolor, (left+bwidth, top+bheight), (left+bwidth, top), 5)
+    pygame.draw.line(screen, linecolor, (left, top), (left+bwidth, top), 1)
+    pygame.draw.line(screen, linecolor, (left, top-2), (left, top+bheight), 1)
+    pygame.draw.line(screen, linecolor, (left, top+bheight), (left+bwidth, top+bheight), 1)
+    pygame.draw.line(screen, linecolor, (left+bwidth, top+bheight), (left+bwidth, top), 1)
     
     text_render = font.render(text, 1, textcolor)
     rect = text_render.get_rect()

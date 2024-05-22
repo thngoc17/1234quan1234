@@ -2,6 +2,7 @@ import pygame
 from modules.Maze_Generator import *
 import random
 from queue import PriorityQueue
+from collections import deque
 class Maze_solver:
     def __init__(self, maze, screen):
         self.maze = maze
@@ -11,7 +12,8 @@ class Maze_solver:
         self.border_size = maze.border_size
         self.start = None
         self.end = None
-        self.start_end()
+        self.START()
+        self.END()
     def __getstate__(self):
         state = self.__dict__.copy()
         # Check if 'screen' attribute exists before deleting it
@@ -32,14 +34,23 @@ class Maze_solver:
                 neighbors.append(self.maze.blocks_list[ny][nx])
 
         return neighbors
-    def start_end(self):
-        rand_start = random.randint(0,self.maze_size[0]-1)
-        rand_end = random.randint(0,self.maze_size[0]-1)
-        start = self.maze.blocks_list[0][rand_start]
-        end = self.maze.blocks_list[self.maze.maze_size[0]-1][rand_end]
+    def START(self, start_point=None):
+        if start_point is None:
+            rand_start = random.randint(0, self.maze_size[0]-1)
+            start = self.maze.blocks_list[0][rand_start]
+        else:
+            start = self.maze.blocks_list[start_point[1]][start_point[0]]
         start.has_walls[0] = False
+        self.start = start
+
+    def END(self, end_point=None):
+        if end_point is None:
+            rand_end = random.randint(0, self.maze_size[0]-1)
+            end = self.maze.blocks_list[self.maze.maze_size[0]-1][rand_end]
+        else:
+            end = self.maze.blocks_list[end_point[1]][end_point[0]]
         end.has_walls[1] = False
-        self.start, self.end = start, end
+        self.end = end
     def a_star_search(self, current_pos):
         count = 0
         start = current_pos
@@ -68,34 +79,25 @@ class Maze_solver:
                         open_set.put((f_score[neighbor], count, neighbor))
                         open_set_hash.add(neighbor)         
         return False
-    def bfs_search(self, start):
-        queue = [start]
-        visited = set([start])
-        came_from = {start: None}
-
+    def bfs_search(self, start_pos):
+        start = start_pos
+        end = self.end
+        queue = deque([start])
+        came_from = {}
+        distance = {block: float("inf") for row in self.maze.blocks_list for block in row}
+        distance[start] = 0
         while queue:
-            current = queue.pop(0)
-            if current == self.end:
+            current = queue.popleft()
+            if current == end:
                 return came_from
-
             for neighbor in self.get_neighbors(current):
-                if neighbor not in visited:
+                if distance[neighbor] == float("inf"):  # If neighbor has not been visited
                     queue.append(neighbor)
-                    visited.add(neighbor)
                     came_from[neighbor] = current
-
+                    distance[neighbor] = distance[current] + 1
         return False
 def h(p1, p2):
     x1, y1 = p1
     x2, y2 = p2
     return abs(x1 - x2) + abs(y1 - y2)
-def reconstruct_path(came_from, current, screen, block_size, border_size):
-    while current in came_from:
-        prev = current
-        current = came_from[current]
-        pygame.draw.line(screen, (0, 255, 0), 
-                         (prev.coordinate[0]*block_size + border_size[0] +block_size//2, prev.coordinate[1]*block_size + border_size[1] + block_size//2), 
-                         (current.coordinate[0]*block_size + border_size[0] + block_size//2, current.coordinate[1]*block_size + border_size[1] + block_size//2), 
-                         block_size//4)
-
     

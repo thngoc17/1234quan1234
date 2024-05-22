@@ -9,7 +9,7 @@ def UserInterface(screen, cfg, mode):
     font = pygame.font.SysFont('Consolas', 30)
     font_small = pygame.font.SysFont('Consolas', 20)
     clock = pygame.time.Clock()
-    valid_users = load_users('users_data.pkl')
+    valid_users = load_users('Data_Users.pkl')
 
     if mode == 'interface':
         while True:
@@ -96,7 +96,7 @@ def UserInterface(screen, cfg, mode):
                         if not entered_username or not entered_password or not confirm_password:
                             showText(screen, font, 'Username, password or confirm password cannot be empty', (255, 0, 0), (cfg.SCREENSIZE[0]//2-100, cfg.SCREENSIZE[1]//2+100))
                         elif entered_username not in valid_users and entered_password == confirm_password:
-                            save_users(entered_username, entered_password, 'users_data.pkl')
+                            save_users(entered_username, entered_password, 'Data_Users.pkl')
                             return True, entered_username, entered_password
                         else:
                             showText(screen, font, 'Passwords do not match or Username already exists', (255, 0, 0), (cfg.SCREENSIZE[0]//2-100, cfg.SCREENSIZE[1]//2+100))

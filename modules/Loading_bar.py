@@ -4,7 +4,7 @@ def Loading_Bar(screen, cfg):
     screen.fill((192, 192, 192))
     font = pygame.font.Font(None, 36)
     text = font.render('Loading...', True, (0, 0, 0))
-    text_rect = text.get_rect(center=(cfg.SCREENSIZE[0]//2, cfg.SCREENSIZE[1]//2))
+    text_rect = text.get_rect(center=(cfg.SCREENSIZE[0]//2, cfg.SCREENSIZE[1]//3))
     screen.blit(text, text_rect)
 
     # Draw the outer box

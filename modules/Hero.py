@@ -2,7 +2,7 @@ import pygame
 
 
 
-class Hero(pygame.sprite.Sprite):
+class Hero():
 	def __init__(self, imagepath, coordinate, block_size, border_size, **kwargs):
 		pygame.sprite.Sprite.__init__(self)
 		self.image = pygame.image.load(imagepath)
@@ -16,10 +16,12 @@ class Hero(pygame.sprite.Sprite):
 	
 	def __getstate__(self):
 		state = self.__dict__.copy()
-		del state['image']
-		del state['rect']
+		if 'image' in state:
+			del state['image']
+		if 'rect' in state:
+			del state['rect']
 		return state
-	
+		
 	def __setstate__(self, state):
 		self.__dict__.update(state)
 		self.image = pygame.image.load(self.imagepath)

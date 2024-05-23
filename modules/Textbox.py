@@ -112,3 +112,12 @@ class Box:
         pygame.draw.rect(self.screen, self.color, self.rect)
         # Draw the border
         pygame.draw.rect(self.screen, self.border_color, self.rect, self.border_width)
+
+def display_resized_image(screen, image_path, position, size):
+    # Load the image
+    image = pygame.image.load(image_path)
+    # Resize the image (adjust dimensions as needed)
+    new_width, new_height = (size, size)
+    resized_image = pygame.transform.scale(image, (new_width, new_height))
+    screen.blit(resized_image, position)
+    pygame.display.flip()

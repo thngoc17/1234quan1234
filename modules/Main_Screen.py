@@ -210,6 +210,8 @@ def Interface_Game_Play(screen, cfg, font, clock, maze_now, maze_solver, hero_no
         showText(screen, font, 'BESTSCORE: %s' % best_scores, (255, 0, 0), (210, 10))
         showText(screen, font, 'USEDSTEPS: %s' % num_steps, (255, 0, 0), (410, 10))
         showText(screen, font, 'ESTIMATED STEPS: %s' % estimated_steps, (255, 0, 0), (610, 10))
+        # Show Jerry at the end of the maze
+        display_resized_image(screen, r"E:\1234quan1234-main\resources\images\jerry.png", (maze_solver.end.coordinate[0] * BLOCKSIZE + cfg.BORDERSIZE[0], maze_solver.end.coordinate[1] * BLOCKSIZE + cfg.BORDERSIZE[1] + 17), BLOCKSIZE)
         # End the timer and calculate elapsed time
         end_time = time.time()
         elapsed_time = end_time - start_time

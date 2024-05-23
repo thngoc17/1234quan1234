@@ -224,7 +224,7 @@ def Interface_Game_Play(screen, cfg, font, clock, maze_now, maze_solver, hero_no
         showText(screen, font, f'PLAYING MODE: {Playing_Mode[0] if Auto_Off else Playing_Mode[1]}', (0, 0, 0), (10, 60))
         showText(screen, font, f'PATHFINDING ALGORITHM: {Pathfinding_Algorithm[0] if A_On else Pathfinding_Algorithm[1]}', (0, 0, 0), (10, 110))
         showText(screen, font, f'CUSTOMIZE: {Customize_Mode[1] if Customize_Off else Customize_Mode[0]}', (0, 0, 0), (10, 160))
-        
+        display_resized_image(screen, r"E:\1234quan1234-main\resources\images\jerry.png", (maze_solver.end.coordinate[0] * BLOCKSIZE + cfg.BORDERSIZE[0], maze_solver.end.coordinate[1] * BLOCKSIZE + cfg.BORDERSIZE[1] + 17), BLOCKSIZE)
         if saving:
             showText(screen, font, 'SAVED SUCCESSFULLY!', (0, 0, 0), (10, 260))    
         elif saving == False:
